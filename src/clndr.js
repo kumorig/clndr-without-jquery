@@ -766,10 +766,9 @@ Clndr.prototype.bindEvents = function() {
    */
   function onCalendarDayClick() {
     let target = null;
-    const currentTarget = event.currentTarget;
-
+    const currentTarget = event.target;
     if (self.options.clickEvents.click) {
-      target = self.buildTargetObject(event.currentTarget, true);
+      target = self.buildTargetObject(currentTarget, true);
       self.options.clickEvents.click.apply(self, [target]);
     }
 
