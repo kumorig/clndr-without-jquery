@@ -873,28 +873,17 @@ Clndr.prototype.buildTargetObject = function(currentTarget, targetWasDay) {
     if (this.options.events) {
       // Are any of the events happening today?
       if (this.options.multiDayEvents) {
-        filterFn = function() {
-          const isSameStart = target.date.isSame(
-            this._clndrStartDateObject,
-            'day');
-          const isAfterStart = target.date.isAfter(
-            this._clndrStartDateObject,
-            'day');
-          const isSameEnd = target.date.isSame(
-            this._clndrEndDateObject,
-            'day');
-          const isBeforeEnd = target.date.isBefore(
-            this._clndrEndDateObject,
-            'day');
-          return (isSameStart || isAfterStart)
-            && (isSameEnd || isBeforeEnd);
+        filterFn = (evt) => {
+          const isSameStart = target.date.isSame(evt._clndrStartDateObject, 'day');
+          const isAfterStart = target.date.isAfter(evt._clndrStartDateObject, 'day');
+          const isSameEnd = target.date.isSame(evt._clndrEndDateObject, 'day');
+          const isBeforeEnd = target.date.isBefore(evt._clndrEndDateObject, 'day');
+          return (isSameStart || isAfterStart) && (isSameEnd || isBeforeEnd);
         };
       }
       else {
-        filterFn = function() {
-          const startString = this._clndrStartDateObject
-            .format('YYYY-MM-DD');
-          return startString === dateString;
+        filterFn = function(evt) {
+          return evt._clndrStartDateObject.format('YYYY-MM-DD') === dateString;
         };
       }
 
