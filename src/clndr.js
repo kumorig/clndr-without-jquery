@@ -64,7 +64,7 @@ function Clndr(element, options) {
   }
 
   if(this.options.locale){
-    moment.locale(locale);
+    moment.locale(this.options.locale);
   }
 
   // This used to be a place where we'd figure out the current month,
