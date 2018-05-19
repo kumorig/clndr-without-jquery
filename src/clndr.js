@@ -63,7 +63,7 @@ function Clndr(element, options) {
     }
   }
 
-  if(this.options.locale){
+  if (this.options.locale) {
     moment.locale(this.options.locale);
   }
 
@@ -854,12 +854,13 @@ Clndr.prototype.bindEvents = function() {
 Clndr.prototype.buildTargetObject = function(currentTarget, targetWasDay) {
   // This is our default target object, assuming we hit an empty day
   // with no events.
-  var target = {
+  const target = {
     date: null,
     events: [],
     element: currentTarget
   };
-  var dateString, filterFn;
+  let dateString;
+  let filterFn;
 
   // Did we click on a day or just an empty box?
   if (targetWasDay) {
@@ -893,13 +894,15 @@ Clndr.prototype.buildTargetObject = function(currentTarget, targetWasDay) {
         filterFn = function() {
           const startString = this._clndrStartDateObject
             .format('YYYY-MM-DD');
-          return startString == dateString;
+          return startString === dateString;
         };
       }
 
       // Filter the dates down to the ones that match.
-      target.events = $.makeArray(
-        $(this.options.events).filter(filterFn));
+      this.options.events =
+        Object.keys(target.events)
+          .map(e => target.events[e])
+          .filter(filterFn);
     }
   }
 
