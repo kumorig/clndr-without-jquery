@@ -29,6 +29,7 @@ import { defaults, template } from './clndr.variables';
  * objects containing event information from the events array.
  */
 function Clndr(element, options) {
+
   var dayDiff;
   var constraintEnd;
   var constraintStart;
@@ -60,6 +61,10 @@ function Clndr(element, options) {
       this.options.events =
         this.addMomentObjectToEvents(this.options.events);
     }
+  }
+
+  if(this.options.locale){
+    moment.locale(locale);
   }
 
   // This used to be a place where we'd figure out the current month,
