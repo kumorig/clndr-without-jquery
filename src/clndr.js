@@ -1,5 +1,5 @@
 import moment from 'moment';
-import lodash_templater from 'lodash.template';
+import * as lodash_templater from 'lodash.template';
 import { defaults, template } from './clndr.variables';
 
 /**
