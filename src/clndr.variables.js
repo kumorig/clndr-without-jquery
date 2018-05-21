@@ -30,8 +30,8 @@ export const template = `<div class="clndr-controls">
 </table>`;
 
 export const defaults = {
+
   events: [],
-  eventListeners: [],
   ready: null,
   extras: null,
   render: null,
@@ -81,10 +81,14 @@ export const defaults = {
     past: 'past',
     today: 'today',
     event: 'event',
+    eventStart: 'event-start',
+    eventEnd: 'event-end',
     inactive: 'inactive',
     selected: 'selected',
     lastMonth: 'last-month',
     nextMonth: 'next-month',
-    adjacentMonth: 'adjacent-month'
+    adjacentMonth: 'adjacent-month',
+    datePrefix: 'calendar-day-',
+    dayOfWeekPrefix: 'calendar-dow-'
   },
 };
