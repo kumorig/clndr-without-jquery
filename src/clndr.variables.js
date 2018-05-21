@@ -30,7 +30,6 @@ export const template = `<div class="clndr-controls">
 </table>`;
 
 export const defaults = {
-
   events: [],
   ready: null,
   extras: null,
