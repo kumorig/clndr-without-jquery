@@ -1,60 +1,71 @@
+import startOfMonth from "date-fns/start_of_month";
+import parse from "date-fns/parse";
+import isValid from "date-fns/is_valid";
+import { endOfMonth } from 'date-fns';
+
 /**
- *
+ * Likely not to work yet!
  */
 export function initLengthOfTime() {
+  console.log('initLengthOfTime', startOfMonth(new Date()));
 
-  const {lengthOfTime} = this.options;
+  const { lengthOfTime } = this.options;
   // This used to be a place where we'd figure out the current month,
   // but since we want to open up support for arbitrary lengths of time
   // we're going to store the current range in addition to the current
   // month.
+
   if (lengthOfTime.months || lengthOfTime.days) {
+    // We skip this for now
     // We want to establish intervalStart and intervalEnd, which will
     // keep track of our boundaries. Let's look at the possibilities...
     if (lengthOfTime.months) {
       // Gonna go right ahead and annihilate any chance for bugs here
       lengthOfTime.days = null;
 
-      // The length is specified in months. Is there a start date?
+      // Defaults
+      let startDate = new Date();
+      this.intervalStart = startOfMonth(startDate);
+
       if (lengthOfTime.startDate) {
-        this.intervalStart = startOfMonth(lengthOfTime.startDate );
-        console.log('intervalStart', intervalStart);
+        startDate = parse(lengthOfTime.startDate);
       } else if (this.options.startWithMonth) {
-        this.intervalStart =
-          moment(this.options.startWithMonth)
-            .startOf('month');
-      } else {
-        this.intervalStart = moment().startOf('month');
+        startDate = parse(this.options.startWithMonth);
       }
+      if (!isValid(startDate)) {
+        startDate = new Date();
+      }
+
+      this.intervalStart = startOfMonth(startDate);
 
       // Subtract a day so that we are at the end of the interval. We
       // always want intervalEnd to be inclusive.
-      this.intervalEnd = moment(this.intervalStart)
-        .add(lengthOfTime.months, 'months')
-        .subtract(1, 'days');
-      this.month = this.intervalStart.clone();
-    }
-    else if (lengthOfTime.days) {
+      this.intervalEnd = addMonths(this.intervalStart, lengthOfTime.months);
+      this.intervalEnd = subtractDays(this.intervalEnd, 1);
+      this.month = new Date(this.intervalStart);
+    } else if (lengthOfTime.days) {
+      let startDate = new Date();
+      this.intervalStart = startOfDay(startDate);
+
       // The length is specified in days. Start date?
       if (lengthOfTime.startDate) {
-        this.intervalStart =
-          moment(lengthOfTime.startDate)
-            .startOf('day');
-      } else {
-        this.intervalStart = moment().weekday(0).startOf('day');
+        startDate = parse(lengthOfTime.startDate);
       }
 
-      this.intervalEnd = moment(this.intervalStart)
-        .add(lengthOfTime.days - 1, 'days')
-        .endOf('day');
-      this.month = this.intervalStart.clone();
+      if (!isValid(startDate)) {
+        startDate = new Date();
+      }
+
+      this.intervalStart = startOfDay(startDate);
+      this.intervalEnd = addDays(this.intervalStart, lengthOfTime.days - 1);
+      this.intervalEnd = EndOfDay(this.intervalStart);
+      this.month = new Date(this.intervalStart);
     }
     // No length of time specified so we're going to default into using the
     // current month as the time period.
   } else {
-    this.month = moment().startOf('month');
-    this.intervalStart = moment(this.month);
-    this.intervalEnd = moment(this.month).endOf('month');
+    this.month = startOfMonth(new Date());
+    this.intervalStart = new Date(this.month);
+    this.intervalEnd = endOfMonth(this.month);
   }
 }
-
