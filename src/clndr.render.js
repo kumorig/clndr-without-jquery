@@ -1,5 +1,8 @@
-
-import { addYears, isAfter, isBefore, isSameDay, subYears } from 'date-fns';
+import addYears from 'date-fns/add_years';
+import isAfter from 'date-fns/is_after';
+import isBefore from 'date-fns/is_before';
+import isSameDay from 'date-fns/is_same_day';
+import subYears from 'date-fns/sub_years';
 
 /**
  * VERY Likely not to work yet!

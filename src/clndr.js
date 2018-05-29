@@ -1,12 +1,31 @@
-import {
-  /* Parse/Format: */ parse, format, isValid,
-  /* Day of week   */ getDay, // (not date!)
-  /* Days:         */ addDays, subDays, startOfDay, endOfDay,
-  /* Months:       */ getMonth, addMonths, subMonths, startOfMonth, endOfMonth,
-  /* Years:        */ getYear, addYears, subYears,
-  /* Comparision:  */ isBefore, isAfter, isSameDay, differenceInCalendarDays, startOfWeek, isSameYear,
-  getDate, setYear, endOfWeek, differenceInCalendarMonths, isSameMonth, setDay, differenceInCalendarYears
-} from 'date-fns';
+import parse from 'date-fns/parse';
+import format from 'date-fns/format';
+import isValid from 'date-fns/is_valid';
+import getDay from 'date-fns/get_day';
+import addDays from 'date-fns/add_days';
+import subDays from 'date-fns/sub_days';
+import startOfDay from 'date-fns/start_of_day';
+import endOfDay from 'date-fns/end_of_day';
+import getMonth from 'date-fns/get_month';
+import addMonths from 'date-fns/add_months';
+import subMonths from 'date-fns/sub_months';
+import startOfMonth from 'date-fns/start_of_month';
+import endOfMonth from 'date-fns/end_of_month';
+import getYear from 'date-fns/get_year';
+import addYears from 'date-fns/add_years';
+import subYears from 'date-fns/sub_years';
+import isBefore from 'date-fns/is_before';
+import isAfter from 'date-fns/is_after';
+import isSameDay from 'date-fns/is_same_day';
+import differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
+import startOfWeek from 'date-fns/start_of_week';
+import isSameYear from 'date-fns/is_same_year';
+import getDate from 'date-fns/get_date';
+import setYear from 'date-fns/set_year';
+import endOfWeek from 'date-fns/end_of_week';
+import differenceInCalendarMonths from 'date-fns/difference_in_calendar_months';
+import isSameMonth from 'date-fns/is_same_month';
+import setDay from 'date-fns/set_day';
 
 const isMonthBefore = (date, dateToCompare) => isBefore(startOfMonth(date), startOfMonth(dateToCompare));
 const isMonthAfter = (date, dateToCompare) => isAfter(startOfMonth(date), startOfMonth(dateToCompare));
@@ -53,10 +72,13 @@ function Clndr(element, options) {
   this.element = element;
   this.eventListenerCount = 0;
 
+  
   // Not a full deep merge, but at least some suboptions we can override.
-  options.clickEvents = {...defaults.clickEvents, ...options.clickEvents}
-  options.targets = {...defaults.targets, ...options.targets}
-  options.classes = {...defaults.classes, ...options.classes}
+  // Lets see if we can make this more complete later
+  options.clickEvents = {...defaults.clickEvents, ...options.clickEvents};
+  options.targets = {...defaults.targets, ...options.targets};
+  options.classes = {...defaults.classes, ...options.classes};
+  options.locale = {...defaults.locale, ...options.locale};
 
   // Complete the options merge
   this.options = {...defaults, template, ...options};
@@ -205,7 +227,8 @@ function Clndr(element, options) {
  */
 Clndr.prototype.init = function() {
   this.daysOfTheWeek = this.options.daysOfTheWeek ||
-    [0, 1, 2, 3, 4, 5, 6].map(i => format(setDay(null,i), 'dd'));
+  [0, 1, 2, 3, 4, 5, 6].map(i => format(setDay(null, i), 'dd', {locale:this.options.locale}));
+  console.log('this.daysOfTheWeek', this.options.locale);
 
   // Shuffle the week if there's an offset
   if (this.options.weekOffset) {
@@ -585,7 +608,7 @@ Clndr.prototype.render = function() {
       year: getYear(this.month),
       eventsThisInterval: null,
       extras: extras,
-      month: format(this.month, 'MMMM'),
+      month: format(this.month, 'MMM', {locale:this.options.locale}),
       daysOfTheWeek: this.daysOfTheWeek,
       eventsLastMonth: this.eventsLastMonth,
       eventsNextMonth: this.eventsNextMonth,
