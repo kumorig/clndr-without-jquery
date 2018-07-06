@@ -1201,7 +1201,7 @@ function isElement(obj) {
   }
 }
 
-export function createClndr(elementOrSelector, options) {
+export default function createClndr(elementOrSelector, options) {
   let elem = isElement(elementOrSelector) ? elementOrSelector : document.querySelector(elementOrSelector);
   if (!elem) {
     throw new Error(
