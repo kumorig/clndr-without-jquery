@@ -72,16 +72,16 @@ function Clndr(element, options) {
   this.element = element;
   this.eventListenerCount = 0;
 
-  
+
   // Not a full deep merge, but at least some suboptions we can override.
   // Lets see if we can make this more complete later
-  options.clickEvents = {...defaults.clickEvents, ...options.clickEvents};
-  options.targets = {...defaults.targets, ...options.targets};
-  options.classes = {...defaults.classes, ...options.classes};
-  options.locale = {...defaults.locale, ...options.locale};
+  options.clickEvents = { ...defaults.clickEvents, ...options.clickEvents };
+  options.targets = { ...defaults.targets, ...options.targets };
+  options.classes = { ...defaults.classes, ...options.classes };
+  options.locale = { ...defaults.locale, ...options.locale };
 
   // Complete the options merge
-  this.options = {...defaults, template, ...options};
+  this.options = { ...defaults, template, ...options };
 
   // Boolean values used to log if any contraints are met
   this.constraints = {
@@ -201,7 +201,7 @@ function Clndr(element, options) {
     'previousYearButton': 'previousYear'
   };
 
-  this.onClickHandler = function(event) {
+  this.onClickHandler = function (event) {
     for (let key in actions) {
       let cssClass = self.options.targets[key];
       if (event.target.classList.contains(cssClass)) {
@@ -225,9 +225,9 @@ function Clndr(element, options) {
  * Sets up the days of the week, the rendering function, binds all of the
  * events to the rendered calendar, and then stores the node locally.
  */
-Clndr.prototype.init = function() {
+Clndr.prototype.init = function () {
   this.daysOfTheWeek = this.options.daysOfTheWeek ||
-  [0, 1, 2, 3, 4, 5, 6].map(i => format(setDay(null, i), 'dd', {locale:this.options.locale}));
+    [0, 1, 2, 3, 4, 5, 6].map(i => format(setDay(null, i), 'dd', { locale: this.options.locale }));
   console.log('this.daysOfTheWeek', this.options.locale);
 
   // Shuffle the week if there's an offset
@@ -257,7 +257,7 @@ Clndr.prototype.init = function() {
   }
 };
 
-Clndr.prototype.shiftWeekdayLabels = function(offset) {
+Clndr.prototype.shiftWeekdayLabels = function (offset) {
   var days = this.daysOfTheWeek;
 
   for (var i = 0; i < offset; i++) {
@@ -272,8 +272,8 @@ Clndr.prototype.shiftWeekdayLabels = function(offset) {
  * an array of calendarDay objects is constructed that contains appropriate
  * events and classes depending on the circumstance.
  */
-Clndr.prototype.createDaysObject = function(startDate, endDate) {
-  const {events} = this.options;
+Clndr.prototype.createDaysObject = function (startDate, endDate) {
+  const { events } = this.options;
   // This array will hold numbers for the entire grid (even the blank
   // spaces).
   let daysArray = [];
@@ -310,7 +310,7 @@ Clndr.prototype.createDaysObject = function(startDate, endDate) {
        * @this { Date , Date }
        * @returns {boolean}
        */
-      const rangeFilter = function(evt) {
+      const rangeFilter = function (evt) {
         return (evt._clndrStartDateObject <= this.end && this.start <= evt._clndrEndDateObject)
       };
 
@@ -401,7 +401,7 @@ Clndr.prototype.createDaysObject = function(startDate, endDate) {
         daysArray.push(
           this.calendarDay({
             classes: this.options.targets.empty + ' ' +
-            this.options.classes.nextMonth
+              this.options.classes.nextMonth
           }));
       }
     }
@@ -410,13 +410,13 @@ Clndr.prototype.createDaysObject = function(startDate, endDate) {
   return daysArray;
 };
 
-Clndr.prototype.createDayObject = function(day, monthEvents) {
+Clndr.prototype.createDayObject = function (day, monthEvents) {
 
   if (!isValid(day)) {
     throw new Error(`Invalid day passed into createDayObject(): ${day}`)
   }
 
-  const {classes, targets, lengthOfTime, constraints, selectedDate} = this.options;
+  const { classes, targets, lengthOfTime, constraints, selectedDate } = this.options;
   const now = new Date();
   const eventsToday = [];
   const classesToday = [];
@@ -510,8 +510,8 @@ Clndr.prototype.createDayObject = function(day, monthEvents) {
   });
 };
 
-Clndr.prototype.render = function() {
-  const {lengthOfTime, extras, constraints, targets, classes, doneRendering} = this.options;
+Clndr.prototype.render = function () {
+  const { lengthOfTime, extras, constraints, targets, classes, doneRendering } = this.options;
 
   let data = {};
   let days;
@@ -608,7 +608,7 @@ Clndr.prototype.render = function() {
       year: getYear(this.month),
       eventsThisInterval: null,
       extras: extras,
-      month: format(this.month, 'MMM', {locale:this.options.locale}),
+      month: format(this.month, 'MMM', { locale: this.options.locale }),
       daysOfTheWeek: this.daysOfTheWeek,
       eventsLastMonth: this.eventsLastMonth,
       eventsNextMonth: this.eventsNextMonth,
@@ -633,7 +633,7 @@ Clndr.prototype.render = function() {
  * @this {instanceOf Clndr}
  * @param {MouseEvent} mouseEvent
  */
-Clndr.prototype.onCalendarDayClick = function(mouseEvent) {
+Clndr.prototype.onCalendarDayClick = function (mouseEvent) {
   const self = this;
   const eventTarget = mouseEvent.target;
   const {
@@ -646,7 +646,7 @@ Clndr.prototype.onCalendarDayClick = function(mouseEvent) {
   } = self.options;
 
   // This one might change
-  let {selectedDate} = self.options;
+  let { selectedDate } = self.options;
 
   if (clickEvents.click) {
     const target = self.buildTargetObject(eventTarget, true);
@@ -686,7 +686,7 @@ Clndr.prototype.onCalendarDayClick = function(mouseEvent) {
  *
  * @param event
  */
-Clndr.prototype.onEmptyCalendarBoxClick = function(event) {
+Clndr.prototype.onEmptyCalendarBoxClick = function (event) {
   const self = event.context;
   const eventTarget = event.currentTarget;
 
@@ -705,7 +705,7 @@ Clndr.prototype.onEmptyCalendarBoxClick = function(event) {
   }
 }
 
-Clndr.prototype.bindEvents = function() {
+Clndr.prototype.bindEvents = function () {
   this.calendarContainer.addEventListener('click', this.onClickHandler);
   this.eventListenerCount += 1;
 };
@@ -717,7 +717,7 @@ Clndr.prototype.bindEvents = function() {
  * (if the latter two exist). Currently it is based on the id, however it'd
  * be nice to use a data- attribute in the future.
  */
-Clndr.prototype.buildTargetObject = function(currentTarget, targetWasDay) {
+Clndr.prototype.buildTargetObject = function (currentTarget, targetWasDay) {
   // This is our default target object, assuming we hit an empty day
   // with no events.
   const target = {
@@ -737,11 +737,11 @@ Clndr.prototype.buildTargetObject = function(currentTarget, targetWasDay) {
 
         // https://github.com/kylestetz/CLNDR/issues/294, cheers @alexalexalex-s
         const targetEndDate = target.date ? endOfDay(new Date(target.date)) : null;
-        filterFn = function(evt) {
+        filterFn = function (evt) {
           return (evt._clndrStartDateObject <= targetEndDate && target.date <= evt._clndrEndDateObject);
         };
       } else {
-        filterFn = function(evt) {
+        filterFn = function (evt) {
           return evt._clndrStartDateObject.format('YYYY-MM-DD') === dateString;
         };
       }
@@ -757,10 +757,10 @@ Clndr.prototype.buildTargetObject = function(currentTarget, targetWasDay) {
  * This method is meant to be called on ".day" elements.
  * @param {HTMLElement} target
  */
-Clndr.prototype.getTargetDateString = function(target) {
+Clndr.prototype.getTargetDateString = function (target) {
   const dayClasses = target.className.split(' ');
   const classes = this.options.classes;
-  const classFinder = function(c) {
+  const classFinder = function (c) {
     return c.indexOf(this.datePrefix) > -1;
   };
   return dayClasses
@@ -773,7 +773,7 @@ Clndr.prototype.getTargetDateString = function(target) {
  * and end dates. ctx contains the current (changed) start and end date,
  * orig contains the original start and end dates.
  */
-Clndr.prototype.triggerEvents = function(ctx, orig) {
+Clndr.prototype.triggerEvents = function (ctx, orig) {
   const timeOpt = ctx.options.lengthOfTime;
   const eventsOpt = ctx.options.clickEvents;
   const newInt = {
@@ -831,7 +831,7 @@ Clndr.prototype.triggerEvents = function(ctx, orig) {
  * @param options
  * @returns {Clndr}
  */
-Clndr.prototype.previousMonth = function() {
+Clndr.prototype.previousMonth = function () {
   const self = this;
   const yearChanged = null;
   const timeOpt = self.options.lengthOfTime;
@@ -873,9 +873,9 @@ Clndr.prototype.previousMonth = function() {
  *
  * @returns {*}
  */
-Clndr.prototype.nextMonth = function() {
+Clndr.prototype.nextMonth = function () {
   const self = this;
-  const {lengthOfTime} = self.options;
+  const { lengthOfTime } = self.options;
   const orig = {
     end: new Date(self.intervalEnd),
     start: new Date(self.intervalStart)
@@ -904,7 +904,7 @@ Clndr.prototype.nextMonth = function() {
   return self;
 };
 
-Clndr.prototype.previousYear = function() {
+Clndr.prototype.previousYear = function () {
   const self = this;
   const orig = {
     end: new Date(self.intervalEnd),
@@ -921,14 +921,14 @@ Clndr.prototype.previousYear = function() {
   return self;
 };
 
-Clndr.prototype.nextYear = function() {
+Clndr.prototype.nextYear = function () {
   const self = this;
 
   if (!self.constraints.nextYear) {
     return self;
   }
 
-  const orig = {end: new Date(self.intervalEnd), start: new Date(self.intervalStart)};
+  const orig = { end: new Date(self.intervalEnd), start: new Date(self.intervalStart) };
 
   self.month = addYears(self.month, 1);
   self.intervalStart = addYears(self.intervalStart, 1);
@@ -939,7 +939,7 @@ Clndr.prototype.nextYear = function() {
   return self;
 };
 
-Clndr.prototype.today = function(options /*, ctx */) {
+Clndr.prototype.today = function (options /*, ctx */) {
   const self = this;
   const orig = {
     end: new Date(self.intervalEnd),
@@ -981,7 +981,7 @@ Clndr.prototype.today = function(options /*, ctx */) {
 /**
  *
  */
-Clndr.prototype.setMonth = function(newMonth, options) {
+Clndr.prototype.setMonth = function (newMonth, options) {
   const timeOpt = this.options.lengthOfTime;
   const orig = {
     end: new Date(self.intervalEnd),
@@ -1005,7 +1005,7 @@ Clndr.prototype.setMonth = function(newMonth, options) {
   return this;
 };
 
-Clndr.prototype.setYear = function(newYear) {
+Clndr.prototype.setYear = function (newYear) {
   const orig = {
     end: new Date(this.intervalEnd),
     start: new Date(this.intervalStart)
@@ -1024,9 +1024,9 @@ Clndr.prototype.setYear = function(newYear) {
 /**
  * Sets the start of the time period according to newDate.
  */
-Clndr.prototype.setIntervalStart = function(newDate) {
+Clndr.prototype.setIntervalStart = function (newDate) {
   newDate = parse(newDate);
-  const {lengthOfTime} = this.options;
+  const { lengthOfTime } = this.options;
   orig = {
     end: new Date(this.intervalEnd),
     start: new Date(this.intervalStart)
@@ -1063,7 +1063,7 @@ Clndr.prototype.setIntervalStart = function(newDate) {
 /**
  * Overwrites extras in the calendar and triggers a render.
  */
-Clndr.prototype.setExtras = function(extras) {
+Clndr.prototype.setExtras = function (extras) {
   this.options.extras = extras;
   this.render();
   return this;
@@ -1072,7 +1072,7 @@ Clndr.prototype.setExtras = function(extras) {
 /**
  * Overwrites events in the calendar and triggers a render.
  */
-Clndr.prototype.setEvents = function(events) {
+Clndr.prototype.setEvents = function (events) {
   // Go through each event and add Date()
   if (this.options.multiDayEvents) {
     this.options.events = this.addDateToMultiDayEvents(events);
@@ -1083,14 +1083,14 @@ Clndr.prototype.setEvents = function(events) {
   return this;
 };
 
-Clndr.prototype.getEvents = function(events) {
+Clndr.prototype.getEvents = function (events) {
   return this.options.events;
 }
 
 /**
  * Adds additional events to the calendar and triggers a render.
  */
-Clndr.prototype.addEvents = function(events /*, reRender*/) {
+Clndr.prototype.addEvents = function (events /*, reRender*/) {
   var reRender = (arguments.length > 1)
     ? arguments[1]
     : true;
@@ -1112,7 +1112,7 @@ Clndr.prototype.addEvents = function(events /*, reRender*/) {
  * Passes all events through a matching function. Any that pass a truth
  * test will be removed from the calendar's events. This triggers a render.
  */
-Clndr.prototype.removeEvents = function(matchingFn) {
+Clndr.prototype.removeEvents = function (matchingFn) {
   for (let i = this.options.events.length - 1; i >= 0; i--) {
     if (matchingFn(this.options.events[i]) == true) {
       this.options.events.splice(i, 1);
@@ -1123,8 +1123,8 @@ Clndr.prototype.removeEvents = function(matchingFn) {
   return this;
 };
 
-Clndr.prototype.addDateToEvents = function(events) {
-  const {dateParameter} = self.options;
+Clndr.prototype.addDateToEvents = function (events) {
+  const { dateParameter } = self.options;
   for (let i = 0; i < events.length; i++) {
     events[i]._clndrStartDateObject = new Date(events[i][dateParameter]);
     new Date
@@ -1137,7 +1137,7 @@ Clndr.prototype.addDateToEvents = function(events) {
  * @param events
  * @returns {*}
  */
-Clndr.prototype.addDateToMultiDayEvents = function(events) {
+Clndr.prototype.addDateToMultiDayEvents = function (events) {
   const options = this.options.multiDayEvents;
 
   return events.map(evt => {
@@ -1166,7 +1166,7 @@ Clndr.prototype.addDateToMultiDayEvents = function(events) {
   })
 };
 
-Clndr.prototype.calendarDay = function(options) {
+Clndr.prototype.calendarDay = function (options) {
   const defaults = {
     day: '',
     date: null,
@@ -1174,10 +1174,10 @@ Clndr.prototype.calendarDay = function(options) {
     classes: this.options.targets.empty
   };
 
-  return {...defaults, ...options};
+  return { ...defaults, ...options };
 };
 
-Clndr.prototype.destroy = function() {
+Clndr.prototype.destroy = function () {
   this.calendarContainer.parent().data('plugin_clndr', null);
   this.options = defaults;
   while (this.calendarContainer.firstChild) {
@@ -1201,13 +1201,16 @@ function isElement(obj) {
   }
 }
 
-export default function createClndr(elementOrSelector, options) {
-  let elem = isElement(elementOrSelector) ? elementOrSelector : document.querySelector(elementOrSelector);
-  if (!elem) {
-    throw new Error(
-      `First argument needs to be an element or a selector  matching at least one element (where first match will be used). 
+export default {
+  createClndr: function (elementOrSelector, options) {
+    let elem = isElement(elementOrSelector) ? elementOrSelector : document.querySelector(elementOrSelector);
+    if (!elem) {
+      throw new Error(
+        `First argument needs to be an element or a selector  matching at least one element (where first match will be used). 
       \nThe passed in value is: <${typeof elementOrSelector}> ${elementOrSelector}`
-    );
+      );
+    }
+    return new Clndr(elem, options);
   }
-  return new Clndr(elem, options);
-}
+};
+  
