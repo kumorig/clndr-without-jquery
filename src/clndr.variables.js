@@ -31,7 +31,7 @@ export const template = `<div class="clndr-controls">
 
 export const defaults = {
   events: [],
-  locale: locale,
+  locale: null,
   ready: null,
   extras: null,
   render: null,
