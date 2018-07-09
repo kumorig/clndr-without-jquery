@@ -228,7 +228,6 @@ function Clndr(element, options) {
 Clndr.prototype.init = function () {
   this.daysOfTheWeek = this.options.daysOfTheWeek ||
     [0, 1, 2, 3, 4, 5, 6].map(i => format(setDay(null, i), 'dd', { locale: this.options.locale }));
-  console.log('this.daysOfTheWeek', this.options.locale);
 
   // Shuffle the week if there's an offset
   if (this.options.weekOffset) {
@@ -1206,11 +1205,10 @@ export default {
     let elem = isElement(elementOrSelector) ? elementOrSelector : document.querySelector(elementOrSelector);
     if (!elem) {
       throw new Error(
-        `First argument needs to be an element or a selector  matching at least one element (where first match will be used). 
+        `First argument needs to be an element or a selector  matching at least one element (where first match will be used).
       \nThe passed in value is: <${typeof elementOrSelector}> ${elementOrSelector}`
       );
     }
     return new Clndr(elem, options);
   }
 };
-  
