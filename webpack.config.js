@@ -4,11 +4,11 @@ module.exports = {
   entry: './src/clndr.js',
   node: {
     __dirname: false,
-    __filename: false
+    __filename: false,
   },
   output: {
     path: __dirname + '/dist',
-    filename: 'clndr.min.js'
+    filename: 'clndr.min.js',
   },
   module: {
     rules: [
@@ -18,13 +18,21 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
-      }
-    ]
+            presets: ['@babel/preset-env'],
+            plugins: [
+              [
+                '@babel/plugin-proposal-object-rest-spread',
+                {
+                  useBuiltIns: true,
+                },
+              ],
+            ],
+          },
+        },
+      },
+    ],
   },
   optimization: {
-    minimize: true
-  }
+    minimize: true,
+  },
 };
